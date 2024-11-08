@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+import traceback
+
+from fastapi import FastAPI, HTTPException
 from dto import VehicleForm
 from service.goblin import ScrapingEngine
 
@@ -12,6 +14,12 @@ def status():
 
 @api.post("/vehicle")
 def get_vehicle(form: VehicleForm):
-    output = ScrapingEngine(form).execute()
+    try:
+        output = ScrapingEngine(form).execute()
 
-    return output
+        return output
+    except Exception as e:
+        traceback.print_exc(e),
+        raise HTTPException(
+            status_code=500, detail="Something wrong happened when scraping"
+        )

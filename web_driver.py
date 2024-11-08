@@ -7,7 +7,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
-class WEB_DRIVER:
+class WebDriver:
     """
     Class Made to regroup all the web related utilities
     """
@@ -24,7 +24,6 @@ class WEB_DRIVER:
         # self.opts.add_argument("--headless")
         # self.opts.add_argument("--no-sandbox")
         # self.opts.add_argument("--allow-file-access-from-files")
-        # self.opts.set_capability("goog:loggingPrefs", {"performance": "ALL"})
         service = ChromeService()
         self.driver = webdriver.Chrome(
             service=service,

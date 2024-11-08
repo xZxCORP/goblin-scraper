@@ -1,13 +1,12 @@
 import json
-import requests
 import time
 
 from pprint import pprint
-from seleniumwire import webdriver
-from seleniumwire.utils import decode
 
+from utils import dict_to_dataclass
 from dto import VehicleForm
-from web_driver import WEB_DRIVER
+from vehicle_schema import VehicleRequestOutput
+from web_driver import WebDriver
 
 URI_RESPONSE_WITH_DATA = "https://histovec.interieur.gouv.fr/public/v1/report_by_data"
 
@@ -15,25 +14,44 @@ URI_RESPONSE_WITH_DATA = "https://histovec.interieur.gouv.fr/public/v1/report_by
 class ScrapingEngine:
     def __init__(self, content: VehicleForm) -> None:
         self.content = content
-        self.driver = WEB_DRIVER()
+        self.driver = WebDriver()
         self.driver.run("https://histovec.interieur.gouv.fr/histovec/proprietaire")
 
     def execute(self):
         if self.content.type == "pro":
-            self.professional_process()
+            self._professional_process()
         else:
-            self.default_process()
+            self._default_process()
 
         self.driver.find_by_id("bouton-recherche").click()
         time.sleep(5)
 
-        data = self.get_response_data()
-        return {"data": data}
+        vehicle_str = self._get_response_data()
+        vehicle_data = json.loads(vehicle_str)
 
-    def professional_process(self):
+        vehicle_data = self._clean_vehicle_data(vehicle_data)
+
+        return {"data": vehicle_data}
+
+    def _clean_vehicle_data(self, vehicle_res: VehicleRequestOutput):
+        vehicle_copy: VehicleRequestOutput = dict_to_dataclass(
+            VehicleRequestOutput, vehicle_res
+        )
+
+        if self.content.vin:
+            vehicle_copy.vehicule.caracteristiques.vin = self.content.vin
+        vehicle_copy.vehicule.infos.plaqueImmatriculation = self.content.immat
+
+        # Anonymize the owner
+        vehicle_copy.incomingQuery = None
+        vehicle_copy.plaqImmatHash = None
+
+        return vehicle_copy
+
+    def _professional_process(self):
         return {"data": 501}
 
-    def default_process(self):
+    def _default_process(self):
         time.sleep(3)
 
         tag = self.driver.find_by_tag("label", array=False)
@@ -55,7 +73,7 @@ class ScrapingEngine:
         )
         return
 
-    def get_response_data(self) -> str:
+    def _get_response_data(self) -> str:
         return list(
             filter(
                 lambda x: x.response and x.url.startswith(URI_RESPONSE_WITH_DATA),
