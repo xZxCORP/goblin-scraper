@@ -1,8 +1,6 @@
 import json
 import time
 
-from pprint import pprint
-
 from utils import dict_to_dataclass
 from dto import VehicleForm
 from vehicle_schema import VehicleRequestOutput
