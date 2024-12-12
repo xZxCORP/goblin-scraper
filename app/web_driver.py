@@ -21,10 +21,13 @@ class WebDriver:
         # self.opts.add_argument("user-agent=Googlebot")
         self.opts.add_argument("--lang=en")
 
-        # self.opts.add_argument("--headless")
-        # self.opts.add_argument("--no-sandbox")
+        self.opts.add_argument("--no-sandbox")
+        self.opts.add_argument("--headless")
+        self.opts.add_argument(
+            "--disable-dev-shm-usage"
+        )  # Commented because it removes every class in the DOM, so we can't target anymore
         # self.opts.add_argument("--allow-file-access-from-files")
-        service = ChromeService()
+        service = ChromeService(executable_path="/usr/bin/chromedriver")
         self.driver = webdriver.Chrome(
             service=service,
             options=self.opts,

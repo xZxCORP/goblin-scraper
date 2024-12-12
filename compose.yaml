@@ -1,0 +1,15 @@
+services:
+  goblin_api:
+    build: .
+    ports:
+      - "4000:80"
+    volumes:
+      - ./app:/code/app
+    networks:
+      - wheelz-app
+
+
+
+networks:
+  wheelz-app:
+    external: true

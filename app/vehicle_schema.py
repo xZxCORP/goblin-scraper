@@ -1,9 +1,7 @@
 import typing
-from dataclasses import dataclass
 
 
-@dataclass
-class InfosImport:
+class InfosImport(typing.TypedDict):
     datePremiereImmatEtranger: str
     dateImportFrance: typing.Any
     isImported: bool
@@ -12,47 +10,40 @@ class InfosImport:
     nomPaysOrigine: typing.Any
 
 
-@dataclass
-class Usage:
+class Usage(typing.TypedDict):
     listeDesUsages: list
     isAgricole: bool
     isCollection: bool
 
 
-@dataclass
-class Gages:
+class Gages(typing.TypedDict):
     hasGages: bool
     informations: list
 
 
-@dataclass
-class Dvs:
+class Dvs(typing.TypedDict):
     hasDvs: bool
     informations: list
 
 
-@dataclass
-class Suspensions:
+class Suspensions(typing.TypedDict):
     hasSuspensions: bool
     informations: list
 
 
-@dataclass
-class Informations:
+class Informations(typing.TypedDict):
     oves: list
     oveis: list
     otcisPv: list
     otcis: list
 
 
-@dataclass
-class Oppositions:
+class Oppositions(typing.TypedDict):
     hasOppositions: bool
     informations: Informations
 
 
-@dataclass
-class SituationAdmin:
+class SituationAdmin(typing.TypedDict):
     isApteACirculer: bool
     isCiAnnule: bool
     dateAnnulation: typing.Any
@@ -66,66 +57,56 @@ class SituationAdmin:
     isVehVole: bool
 
 
-@dataclass
-class Accidents:
+class Accidents(typing.TypedDict):
     nbSinistres: int
     dateDerniereResolution: typing.Any
     dateDernierSinistre: typing.Any
 
 
-@dataclass
-class Historique:
+class Historique(typing.TypedDict):
     opaDate: str
     opaType: str
 
 
-@dataclass
-class PersonnePhysique:
+class PersonnePhysique(typing.TypedDict):
     nomNaissance: str
     prenom: str
 
 
-@dataclass
-class PersonneMorale:
+class PersonneMorale(typing.TypedDict):
     raisonSociale: str
     siren: str
 
 
-@dataclass
-class Proprietaire:
+class Proprietaire(typing.TypedDict):
     personnePhysique: PersonnePhysique
     personneMorale: PersonneMorale
     codePostal: str
 
 
-@dataclass
-class CertificatImmatriculation:
+class CertificatImmatriculation(typing.TypedDict):
     age: int
     dateEmission: str
 
 
-@dataclass
-class Utac:
+class Utac(typing.TypedDict):
     updateDate: str
     status: typing.Any
     ct: list
 
 
-@dataclass
-class SivPhysique:
+class SivPhysique(typing.TypedDict):
     nom: str
     prenom: str
     immat: str
     numeroFormule: str
 
 
-@dataclass
-class IncomingQuery:
+class IncomingQuery(typing.TypedDict):
     SivPhysique: SivPhysique
 
 
-@dataclass
-class Caracteristiques:
+class Caracteristiques(typing.TypedDict):
     marque: str
     nomCommercial: str
     puissanceCv: int
@@ -156,8 +137,7 @@ class Caracteristiques:
     rapportPuissMasse: int
 
 
-@dataclass
-class Infos:
+class Infos(typing.TypedDict):
     nbTitulaires: int
     datePremiereImmatriculationFrance: str
     datePremiereImmatSiv: str
@@ -165,8 +145,7 @@ class Infos:
     dateConvertionSiv: typing.Any
 
 
-@dataclass
-class Vehicule:
+class Vehicule(typing.TypedDict):
     caracteristiques: Caracteristiques
     infos: Infos
     infosImport: InfosImport
@@ -176,8 +155,7 @@ class Vehicule:
     historique: list[Historique]
 
 
-@dataclass
-class VehicleRequestOutput:
+class VehicleRequestOutput(typing.TypedDict):
     vehicule: Vehicule
     proprietaire: Proprietaire
     certificatImmatriculation: CertificatImmatriculation

@@ -1,7 +1,6 @@
 import json
 import time
 
-from utils import dict_to_dataclass
 from dto import VehicleForm
 from vehicle_schema import VehicleRequestOutput
 from web_driver import WebDriver
@@ -25,24 +24,23 @@ class ScrapingEngine:
         time.sleep(5)
 
         vehicle_str = self._get_response_data()
-        vehicle_data = json.loads(vehicle_str)
-
+        vehicle_data: VehicleRequestOutput = json.loads(vehicle_str)
+        if vehicle_data.get("vehicule") is None:
+            return {"data": None}
         vehicle_data = self._clean_vehicle_data(vehicle_data)
 
         return {"data": vehicle_data}
 
     def _clean_vehicle_data(self, vehicle_res: VehicleRequestOutput):
-        vehicle_copy: VehicleRequestOutput = dict_to_dataclass(
-            VehicleRequestOutput, vehicle_res
-        )
+        vehicle_copy: VehicleRequestOutput = vehicle_res.copy()
 
         if self.content.vin:
-            vehicle_copy.vehicule.caracteristiques.vin = self.content.vin
-        vehicle_copy.vehicule.infos.plaqueImmatriculation = self.content.immat
+            vehicle_copy["vehicule"]["caracteristiques"]["vin"] = self.content.vin
+        vehicle_copy["vehicule"]["infos"]["plaqueImmatriculation"] = self.content.immat
 
         # Anonymize the owner
-        vehicle_copy.incomingQuery = None
-        vehicle_copy.plaqImmatHash = None
+        vehicle_copy["incomingQuery"] = None
+        vehicle_copy["plaqImmatHash"] = None
 
         return vehicle_copy
 
