@@ -17,16 +17,16 @@ class WebDriver:
         Initialization of the variables, and drivers
         """
         self.opts = Options()
-        # Commented because it removes every class in the DOM, so we can't target anymore
-        # self.opts.add_argument("user-agent=Googlebot")
-        self.opts.add_argument("--lang=en")
 
         self.opts.add_argument("--no-sandbox")
         self.opts.add_argument("--headless")
-        self.opts.add_argument(
-            "--disable-dev-shm-usage"
-        )  # Commented because it removes every class in the DOM, so we can't target anymore
-        # self.opts.add_argument("--allow-file-access-from-files")
+        self.opts.add_argument("--disable-dev-shm-usage")
+        self.opts.add_argument("--disable-extensions")
+        self.opts.add_argument("--disable-gpu")
+        self.opts.add_argument("--disable-logging")
+        self.opts.add_argument("--log-level=3")
+
+        self.opts.add_argument("--blink-settings=imagesEnabled=false")
         service = ChromeService(executable_path="/usr/bin/chromedriver")
         self.driver = webdriver.Chrome(
             service=service,
@@ -34,9 +34,6 @@ class WebDriver:
             seleniumwire_options={"disable_encoding": True},
         )
         self.action_chains = ActionChains(self.driver)
-        self.os_language = self.driver.execute_script(
-            "return window.navigator.userLanguage || window.navigator.language"
-        )
 
     def run(self, url: str) -> None:
         """
