@@ -2,7 +2,7 @@ services:
   goblin_api:
     build: .
     ports:
-      - "4000:80"
+      - "4020:80"
     volumes:
       - ./app:/code/app
     networks:
